@@ -62,10 +62,52 @@
     <pre id="output">Results will appear here...</pre>
 </div>
 
+<div class="section">
+    <h2>Live Whale Transfer Tracking</h2>
+    <div class="table-container">
+        <table id="whale_transfer">
+            <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Symbol</th>
+                <th>Chain</th>
+                <th>Block</th>
+                <th>Timestamp</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Transaction Hash</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 <!-- Include the Heimdahl SDK -->
 <script src="/dist/heimdahl.js"></script>
 
 <script>
+    function addTransfer(transfer) {
+        const tableBody = document.querySelector("#whale_transfer tbody");
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+                <td>${Math.round(transfer.amount / Math.pow(10, transfer.decimals, 4))}</td>
+                <td>${transfer.symbol}</td>
+                <td>${transfer.chain}</td>
+                <td>${transfer.position}</td>
+                <td>${new Date(transfer.timestamp * 1000).toLocaleString()}</td>
+                <td>${transfer.from_address}</td>
+                <td>${transfer.to_address}</td>
+                <td>${transfer.tx_hash}</td>
+            `;
+
+        tableBody.prepend(row);
+    }
+
+
     // Helper function to append output
     function appendOutput(text) {
         const output = document.getElementById('output');
@@ -213,6 +255,45 @@
         clearOutput();
         testGetEvents();
     });
+    const whales = {
+        'USDT': 1e6,
+        'DAI': 1e6,
+        'USDC': 1e6,
+        'WBTC': 12,
+        'WETH': 541.72,
+    }
+
+    var registreed = {};
+    window.addEventListener('load', () => {
+        try {
+            client.streamTransfers({}, (t) => {
+                const amt = t.amount / Math.pow(10, t.decimals);
+
+                if (whales[t.symbol] === undefined) {
+                    return;
+                }
+
+                const wamt = whales[t.symbol];
+                if (amt <= wamt) {
+                    return;
+                }
+
+                if (registreed.length > 1000) {
+                    registreed = {};
+                }
+
+                if (registreed[t.tx_hash + t.from_address + t.to_address] === undefined) {
+                    registreed[t.tx_hash + t.from_address + t.to_address] = '';
+                    addTransfer(t)
+                }
+
+
+            });
+        } catch (error) {
+            appendOutput(`Error getting events: ${error.message}`);
+        }
+    });
+
 </script>
 </body>
 </html>

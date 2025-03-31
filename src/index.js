@@ -6,18 +6,46 @@
  */
 
 class HeimdahlClient {
+    globalThis
+    HeimdahlClient = HeimdahlClient;
+
     /**
      * Initialize the Heimdahl client.
      *
      * @param {string} apiKey - Your Heimdahl API key
-     * @param {string} [baseUrl="https://api.heimdahl.xyz/v1"] - API base URL (defaults to production)
      */
-    constructor(apiKey, baseUrl = "https://api.heimdahl.xyz/v1") {
+    constructor(apiKey) {
+        const baseUrl = "https://api.heimdahl.xyz/v1";
+        const baseWSUrl = "wss://api.heimdahl.xyz/v1";
+
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
+        this.baseWSUrl = baseWSUrl;
         this.headers = {
             "Authorization": `Bearer ${apiKey}`,
             "Content-Type": "application/json"
+        };
+    }
+
+
+    /**
+     * Create websocket connection to Heimdahl API
+     *
+     * @param {string} endpoint - API endpoint to call
+     * @param {Object} callback  - Callback object to handle result output
+     * @returns {Promise<Object>} - API response parsed as JSON
+     * @private
+     */
+    async _createConnection(endpoint, callback) {
+        var ws = new WebSocket(`${this.baseWSUrl}/${endpoint}?api_key=${this.apiKey}`);
+
+        ws.onmessage = function (message) {
+            var msg = JSON.parse(message.data);
+            callback(msg);
+        };
+
+        ws.onerror = function (err) {
+            throw err;
         };
     }
 
@@ -141,9 +169,9 @@ class HeimdahlClient {
     async getTransfers({
                            chain = "all",
                            network = "mainnet",
-                           token = null,
-                           fromAddress = null,
-                           toAddress = null,
+                           token = "all",
+                           fromAddress = "all",
+                           toAddress = "all",
                            page = 0,
                            pageSize = 10
                        } = {}) {
@@ -184,6 +212,62 @@ class HeimdahlClient {
 
         return this._makeRequest(endpoint, params);
     }
+
+    /**
+     * Get token transfer data across chains.
+     *
+     * @param {Object} options - Transfer query options
+     * @param {string} [options.chain="all"] - Blockchain name (ethereum, arbitrum, solana, etc.) or "all"
+     * @param {string} [options.network="mainnet"] - Network (mainnet, testnet)
+     * @param {string} [options.token=null] - Token address or symbol
+     * @param {string} [options.fromAddress=null] - Filter by sender address
+     * @param {string} [options.toAddress=null] - Filter by recipient address
+     * @param {number} [options.page=0] - Page number for pagination
+     * @param {number} [options.pageSize=10] - Number of results per page
+     * @param {Object} [callback] - Callback for handling incoming messages
+     */
+    async streamTransfers({
+                              chain = "all",
+                              network = "mainnet",
+                              token = "all",
+                              fromAddress = "all",
+                              toAddress = "all",
+                              page = 0,
+                              pageSize = 10
+                          } = {}, callback) {
+        // Build the pattern-based URL
+        const patternParts = [chain, network];
+
+        if (token) {
+            patternParts.push(token.toLowerCase());
+            if (fromAddress) {
+                patternParts.push(fromAddress);
+                if (toAddress) {
+                    patternParts.push(toAddress);
+                } else {
+                    patternParts.push("all"); // Default if to_address not specified
+                }
+            } else {
+                patternParts.push("all"); // Default if from_address not specified
+                if (toAddress) {
+                    patternParts.push(toAddress);
+                } else {
+                    patternParts.push("all"); // Default if to_address not specified
+                }
+            }
+        }
+
+        patternParts.push("all"); // Final part of the pattern
+
+        // URL-encode each part if needed
+        const encodedParts = patternParts.map(part => encodeURIComponent(part));
+        const pattern = encodedParts.join(".");
+
+        // Make the request
+        const endpoint = `transfers/stream/${pattern}`;
+        return this._createConnection(endpoint, callback);
+    }
+
 
     /**
      * Get raw blockchain events for a specific token and event type.
@@ -268,8 +352,8 @@ class HeimdahlClient {
      */
     async getTokenTransfers({
                                 token,
-                                fromAddress = null,
-                                toAddress = null,
+                                fromAddress = "all",
+                                toAddress = "all",
                                 chain = "all",
                                 network = "mainnet",
                                 limit = 100
