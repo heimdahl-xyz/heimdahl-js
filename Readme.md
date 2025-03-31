@@ -24,22 +24,15 @@ and event data through a unified interface.
 ### Node.js
 
 ```bash
-# Using npm
-npm install heimdahl-sdk
 
-# Using yarn
-yarn add heimdahl-sdk
+git clone https://github.com/yourusername/heimdahl-sdk.git
+cd heimdahl-js
 
-# If using Node.js < v18, also install node-fetch
-npm install node-fetch@2
 ```
 
 ### Browser
 
 ```html
-<!-- Via CDN (replace x.y.z with the desired version) -->
-<script src="https://cdn.jsdelivr.net/npm/heimdahl-sdk@x.y.z/dist/heimdahl.min.js"></script>
-
 <!-- Or include the file directly -->
 <script src="path/to/heimdahl.min.js"></script>
 ```
@@ -48,7 +41,7 @@ npm install node-fetch@2
 
 You'll need an API key from Heimdahl to use this SDK. Get yours by:
 
-1. Creating an account at [heimdahl.xyz](https://heimdahl.xyz)
+1. Creating an account at [heimdahl.xyz](https://drakar.heimdahl.xyz)
 2. Navigating to your dashboard
 3. Generating a new API key
 
@@ -63,26 +56,26 @@ const HeimdahlClient = require('heimdahl-sdk');
 const client = new HeimdahlClient('your-api-key');
 
 async function main() {
-  try {
-    // Get supported chains
-    const chains = await client.getChains();
-    console.log('Supported chains:', chains);
-    
-    // Get USDC/WETH swaps on Ethereum
-    const swaps = await client.getSwaps({
-      chain: 'ethereum',
-      token1: 'USDC',
-      token2: 'WETH',
-      sizeBucket: 'all',
-      pageSize: 5
-    });
-    
-    console.log(`${swaps.swaps.length} swaps found`);
-  } catch (error) {
-    console.error('Error:', error);
-  } finally {
-    client.close();
-  }
+    try {
+        // Get supported chains
+        const chains = await client.getChains();
+        console.log('Supported chains:', chains);
+
+        // Get USDC/WETH swaps on Ethereum
+        const swaps = await client.getSwaps({
+            chain: 'ethereum',
+            token1: 'USDC',
+            token2: 'WETH',
+            sizeBucket: 'all',
+            pageSize: 5
+        });
+
+        console.log(`${swaps.swaps.length} swaps found`);
+    } catch (error) {
+        console.error('Error:', error);
+    } finally {
+        client.close();
+    }
 }
 
 main();
@@ -102,19 +95,20 @@ const client = new HeimdahlClient('your-api-key');
 ### Browser
 
 ```html
+
 <script src="heimdahl.min.js"></script>
 <script>
-  // Initialize the client with your API key
-  const client = new HeimdahlClient('your-api-key');
-  
-  // Get supported chains
-  client.getChains()
-    .then(chains => {
-      console.log('Supported chains:', chains);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+    // Initialize the client with your API key
+    const client = new HeimdahlClient('your-api-key');
+
+    // Get supported chains
+    client.getChains()
+            .then(chains => {
+                console.log('Supported chains:', chains);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
 </script>
 ```
 
@@ -152,13 +146,13 @@ const contracts = await client.getContracts();
 ```javascript
 // Get cross-chain swap data
 const swaps = await client.getSwaps({
-  chain: "ethereum",      // Blockchain name or "all"
-  network: "mainnet",     // Network (mainnet, testnet)
-  token1: "USDC",         // First token address or symbol
-  token2: "WETH",         // Second token address or symbol
-  sizeBucket: "all",      // Size category (micro, small, medium, large, whale, all)
-  page: 0,                // Page number for pagination
-  pageSize: 10            // Number of results per page
+    chain: "ethereum",      // Blockchain name or "all"
+    network: "mainnet",     // Network (mainnet, testnet)
+    token1: "USDC",         // First token address or symbol
+    token2: "WETH",         // Second token address or symbol
+    sizeBucket: "all",      // Size category (micro, small, medium, large, whale, all)
+    page: 0,                // Page number for pagination
+    pageSize: 10            // Number of results per page
 });
 ```
 
@@ -167,13 +161,13 @@ const swaps = await client.getSwaps({
 ```javascript
 // Get token transfer data
 const transfers = await client.getTransfers({
-  chain: "arbitrum",      // Blockchain name or "all"
-  network: "mainnet",     // Network (mainnet, testnet)
-  token: "USDC",          // Token address or symbol
-  fromAddress: "0x123..", // Filter by sender address
-  toAddress: null,        // Filter by recipient address
-  page: 0,                // Page number for pagination
-  pageSize: 10            // Number of results per page
+    chain: "arbitrum",      // Blockchain name or "all"
+    network: "mainnet",     // Network (mainnet, testnet)
+    token: "USDC",          // Token address or symbol
+    fromAddress: "0x123..", // Filter by sender address
+    toAddress: null,        // Filter by recipient address
+    page: 0,                // Page number for pagination
+    pageSize: 10            // Number of results per page
 });
 ```
 
@@ -182,9 +176,9 @@ const transfers = await client.getTransfers({
 ```javascript
 // Get raw blockchain events
 const events = await client.getEvents({
-  chain: "arbitrum",
-  tokenAddress: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-  eventName: "Transfer"
+    chain: "arbitrum",
+    tokenAddress: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+    eventName: "Transfer"
 });
 ```
 
@@ -193,18 +187,18 @@ const events = await client.getEvents({
 ```javascript
 // Search for swaps between a specific token pair
 const filteredSwaps = await client.searchSwapsByTokenPair({
-  token1: "USDC",
-  token2: "WETH",
-  chain: "all",
-  limit: 100
+    token1: "USDC",
+    token2: "WETH",
+    chain: "all",
+    limit: 100
 });
 
 // Get all transfers for a specific token
 const tokenTransfers = await client.getTokenTransfers({
-  token: "USDC",
-  fromAddress: "0x123..",
-  chain: "all",
-  limit: 100
+    token: "USDC",
+    fromAddress: "0x123..",
+    chain: "all",
+    limit: 100
 });
 ```
 
@@ -215,21 +209,21 @@ const tokenTransfers = await client.getTokenTransfers({
 ```javascript
 // Track USDC/WETH swaps across multiple chains
 async function trackTokenSwaps() {
-  const chains = ["ethereum", "arbitrum", "optimism"];
-  const results = {};
-  
-  for (const chain of chains) {
-    const swaps = await client.getSwaps({
-      chain,
-      token1: "USDC",
-      token2: "WETH",
-      pageSize: 10
-    });
-    
-    results[chain] = swaps.swaps;
-  }
-  
-  return results;
+    const chains = ["ethereum", "arbitrum", "optimism"];
+    const results = {};
+
+    for (const chain of chains) {
+        const swaps = await client.getSwaps({
+            chain,
+            token1: "USDC",
+            token2: "WETH",
+            pageSize: 10
+        });
+
+        results[chain] = swaps.swaps;
+    }
+
+    return results;
 }
 ```
 
@@ -238,16 +232,16 @@ async function trackTokenSwaps() {
 ```javascript
 // Monitor large transfers of a specific token
 async function trackWhaleTransfers(token, threshold) {
-  const transfers = await client.getTransfers({
-    chain: "all",
-    token,
-    pageSize: 100
-  });
-  
-  // Filter for transfers above the threshold
-  return transfers.filter(t => 
-    parseFloat(t.amount) >= threshold
-  );
+    const transfers = await client.getTransfers({
+        chain: "all",
+        token,
+        pageSize: 100
+    });
+
+    // Filter for transfers above the threshold
+    return transfers.filter(t =>
+        parseFloat(t.amount) >= threshold
+    );
 }
 ```
 
@@ -256,19 +250,19 @@ async function trackWhaleTransfers(token, threshold) {
 ```javascript
 // Analyze Transfer events for a specific token
 async function analyzeTransferEvents(chain, tokenAddress) {
-  const events = await client.getEvents({
-    chain,
-    tokenAddress,
-    eventName: "Transfer"
-  });
-  
-  // Process event data
-  const summary = events.events.reduce((acc, event) => {
-    // Custom analysis logic
-    return acc;
-  }, { totalTransfers: 0, uniqueAddresses: new Set() });
-  
-  return summary;
+    const events = await client.getEvents({
+        chain,
+        tokenAddress,
+        eventName: "Transfer"
+    });
+
+    // Process event data
+    const summary = events.events.reduce((acc, event) => {
+        // Custom analysis logic
+        return acc;
+    }, {totalTransfers: 0, uniqueAddresses: new Set()});
+
+    return summary;
 }
 ```
 
@@ -279,32 +273,32 @@ async function analyzeTransferEvents(chain, tokenAddress) {
 ```javascript
 // Function to fetch all pages of data
 async function fetchAllPages(fetchFunction, params = {}) {
-  let allResults = [];
-  let page = 0;
-  let hasMore = true;
-  
-  while (hasMore) {
-    const results = await fetchFunction({
-      ...params,
-      page,
-      pageSize: 100
-    });
-    
-    if (results.length === 0) {
-      hasMore = false;
-    } else {
-      allResults = [...allResults, ...results];
-      page++;
+    let allResults = [];
+    let page = 0;
+    let hasMore = true;
+
+    while (hasMore) {
+        const results = await fetchFunction({
+            ...params,
+            page,
+            pageSize: 100
+        });
+
+        if (results.length === 0) {
+            hasMore = false;
+        } else {
+            allResults = [...allResults, ...results];
+            page++;
+        }
     }
-  }
-  
-  return allResults;
+
+    return allResults;
 }
 
 // Usage
 const allTransfers = await fetchAllPages(client.getTransfers.bind(client), {
-  chain: "ethereum",
-  token: "USDC"
+    chain: "ethereum",
+    token: "USDC"
 });
 ```
 
@@ -312,25 +306,25 @@ const allTransfers = await fetchAllPages(client.getTransfers.bind(client), {
 
 ```javascript
 try {
-  const swaps = await client.getSwaps({
-    chain: "ethereum",
-    token1: "USDC",
-    token2: "WETH"
-  });
-  
-  // Process successful response
+    const swaps = await client.getSwaps({
+        chain: "ethereum",
+        token1: "USDC",
+        token2: "WETH"
+    });
+
+    // Process successful response
 } catch (error) {
-  if (error.message.includes('rate limit')) {
-    // Handle rate limiting
-    console.log('Rate limited. Retrying in 1 minute...');
-    setTimeout(retryFunction, 60000);
-  } else if (error.message.includes('404')) {
-    // Handle not found errors
-    console.error('Resource not found');
-  } else {
-    // Handle other errors
-    console.error('API Error:', error);
-  }
+    if (error.message.includes('rate limit')) {
+        // Handle rate limiting
+        console.log('Rate limited. Retrying in 1 minute...');
+        setTimeout(retryFunction, 60000);
+    } else if (error.message.includes('404')) {
+        // Handle not found errors
+        console.error('Resource not found');
+    } else {
+        // Handle other errors
+        console.error('API Error:', error);
+    }
 }
 ```
 
