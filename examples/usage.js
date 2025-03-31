@@ -4,7 +4,7 @@
  */
 
 // In Node.js environment, you would import like this:
-const HeimdahlClient = require('./client');
+const HeimdahlClient = require('../src/heimdahl-client');
 
 // In browser, the HeimdahlClient would be available globally if you include the script
 
