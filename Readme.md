@@ -367,7 +367,8 @@ Having issues or questions? Here's how to get help:
 
 - Open an [issue](https://github.com/yourusername/heimdahl-js/issues)
 - Contact us at support@heimdahl.xyz
-- Join our Discord community: [Heimdahl Discord](https://discord.gg/heimdahl)
+- Join our Discord community: [Heimdahl Discord](
+- https://discord.gg/uA6B88VS)
 
 ---
 
