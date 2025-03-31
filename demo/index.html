@@ -98,6 +98,8 @@
         'binance': 'https://bscscan.com/tx/',
         'ethereum   ': 'https://etherscan.io/tx/',
         'arbitrum': 'https://arbiscan.io/tx/',
+        'solana': 'https://solscan.io/tx/',
+        'tron': 'https://tronscan.org/#/transaction/',
     };
 
     function addTransfer(transfer) {
@@ -273,6 +275,9 @@
         'WBTC': 12,
         'WETH': 541.72,
         'Cake': 505050,
+        'SOL': 7951.98,
+        'RAY': 588118.24,
+        'TRX': 4171985.95,
     }
 
 
@@ -295,6 +300,7 @@
                     registreed = {};
                 }
 
+                console.log(t.chain);
                 if (registreed[t.tx_hash + t.from_address + t.to_address] === undefined) {
                     registreed[t.tx_hash + t.from_address + t.to_address] = '';
                     addTransfer(t)
