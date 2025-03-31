@@ -2,7 +2,7 @@
 
 ![Heimdahl Banner](https://via.placeholder.com/800x150?text=Heimdahl+Blockchain+Data+Platform)
 
-[![npm version](https://img.shields.io/npm/v/heimdahl-sdk.svg)](https://www.npmjs.com/package/heimdahl-sdk)
+[![npm version](https://img.shields.io/npm/v/heimdahl-js.svg)](https://www.npmjs.com/package/heimdahl-js)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -25,7 +25,7 @@ and event data through a unified interface.
 
 ```bash
 
-git clone https://github.com/yourusername/heimdahl-sdk.git
+git clone https://github.com/yourusername/heimdahl-js.git
 cd heimdahl-js
 
 ```
@@ -50,7 +50,7 @@ You'll need an API key from Heimdahl to use this SDK. Get yours by:
 ### Node.js (CommonJS)
 
 ```javascript
-const HeimdahlClient = require('heimdahl-sdk');
+const HeimdahlClient = require('heimdahl-js');
 
 // Initialize the client with your API key
 const client = new HeimdahlClient('your-api-key');
@@ -84,7 +84,7 @@ main();
 ### Node.js (ES Modules)
 
 ```javascript
-import HeimdahlClient from 'heimdahl-sdk';
+import HeimdahlClient from 'heimdahl-js';
 
 // Initialize the client with your API key
 const client = new HeimdahlClient('your-api-key');
@@ -334,8 +334,8 @@ Want to contribute to the Heimdahl SDK? Great! Here's how to set up the developm
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/heimdahl-sdk.git
-cd heimdahl-sdk
+git clone https://github.com/yourusername/heimdahl-js.git
+cd heimdahl-js
 
 # Install dependencies
 npm install
@@ -365,7 +365,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 Having issues or questions? Here's how to get help:
 
-- Open an [issue](https://github.com/yourusername/heimdahl-sdk/issues)
+- Open an [issue](https://github.com/yourusername/heimdahl-js/issues)
 - Contact us at support@heimdahl.xyz
 - Join our Discord community: [Heimdahl Discord](https://discord.gg/heimdahl)
 
