@@ -64,10 +64,13 @@
 
 <div class="section">
     <h2>Live Whale Transfer Tracking</h2>
+    <h3>Realtime Token transfer monitoring across tokens and chains above 1 million USD or equivalent in respective
+        token</h3>
     <div class="table-container">
         <table id="whale_transfer">
             <thead>
             <tr>
+                <th>Transaction Hash</th>
                 <th>Amount</th>
                 <th>Symbol</th>
                 <th>Chain</th>
@@ -75,7 +78,6 @@
                 <th>Timestamp</th>
                 <th>From</th>
                 <th>To</th>
-                <th>Transaction Hash</th>
             </tr>
             </thead>
             <tbody>
@@ -89,11 +91,21 @@
 <script src="/dist/heimdahl.js"></script>
 
 <script>
+
+    var links = {
+        'base': 'https://basescan.org/tx/',
+        'polygon': 'https://basescan.org/tx/',
+        'binance': 'https://bscscan.com/tx/',
+        'ethereum   ': 'https://etherscan.io/tx/',
+        'arbitrum': 'https://arbiscan.io/tx/',
+    };
+
     function addTransfer(transfer) {
         const tableBody = document.querySelector("#whale_transfer tbody");
         const row = document.createElement("tr");
 
         row.innerHTML = `
+                <td><a href="${links[transfer.chain]}/${transfer.tx_hash}"> ${transfer.tx_hash} </a></td>
                 <td>${Math.round(transfer.amount / Math.pow(10, transfer.decimals, 4))}</td>
                 <td>${transfer.symbol}</td>
                 <td>${transfer.chain}</td>
@@ -101,7 +113,6 @@
                 <td>${new Date(transfer.timestamp * 1000).toLocaleString()}</td>
                 <td>${transfer.from_address}</td>
                 <td>${transfer.to_address}</td>
-                <td>${transfer.tx_hash}</td>
             `;
 
         tableBody.prepend(row);
@@ -261,7 +272,9 @@
         'USDC': 1e6,
         'WBTC': 12,
         'WETH': 541.72,
+        'Cake': 505050,
     }
+
 
     var registreed = {};
     window.addEventListener('load', () => {
