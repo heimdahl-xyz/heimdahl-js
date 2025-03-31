@@ -5,11 +5,7 @@
  * Compatible with both browser and Node.js environments.
  */
 
-
-// import fetch from "node-fetch";
-
-
-class Index {
+class HeimdahlClient {
     /**
      * Initialize the Heimdahl client.
      *
@@ -155,7 +151,7 @@ class Index {
         const patternParts = [chain, network];
 
         if (token) {
-            patternParts.push(token);
+            patternParts.push(token.toLowerCase());
             if (fromAddress) {
                 patternParts.push(fromAddress);
                 if (toAddress) {
@@ -317,9 +313,4 @@ class Index {
     }
 }
 
-// Export the client for both Node.js and browser environments
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Index;
-} else if (typeof window !== 'undefined') {
-    window.Index = Index;
-}
+globalThis.HeimdahlClient = HeimdahlClient;

@@ -63,7 +63,7 @@
 </div>
 
 <!-- Include the Heimdahl SDK -->
-<script src="./src/client.js"></script>
+<script src="/dist/heimdahl.js"></script>
 
 <script>
     // Helper function to append output
@@ -79,7 +79,7 @@
     }
 
     // Initialize the client with your API key
-    const client = new Index("pk_dc07ea43afeb807362e9b67201e6d07054f7292edb2c4bad");
+    const client = new HeimdahlClient("pk_dc07ea43afeb807362e9b67201e6d07054f7292edb2c4bad");
 
     // Example 1: Get chains
     async function testGetChains() {
@@ -126,10 +126,13 @@
 
             appendOutput(`${swaps.swaps.length} swaps found`);
             swaps.swaps.forEach(e => {
+                console.log(e);
+                appendOutput(`Tx hash: ${e.tx_hash}`);
                 appendOutput(`Token 1: ${e.token1_symbol}`);
                 appendOutput(`Token 2: ${e.token2_symbol}`);
                 appendOutput(`Amount 1: ${e.token1_amount}`);
                 appendOutput(`Amount 2: ${e.token2_amount}`);
+
                 appendOutput("---");
             });
             appendOutput("\n");
@@ -145,11 +148,11 @@
             const transfers = await client.getTransfers({
                 chain: "arbitrum",
                 token: "USDC",
-                fromAddress: "0x51C72848c68a965f66FA7a88855F9f7784502a7F",
+                fromAddress: "0xae755e5C81e7278B94486A95AeF5590533957026",
                 pageSize: 5
             });
 
-            appendOutput(`Found ${transfers.length} USDC transfers from the address on Arbitrum\n`);
+            appendOutput(`Found ${transfers.transfers.length} USDC transfers from the address on Arbitrum\n`);
         } catch (error) {
             appendOutput(`Error getting transfers: ${error.message}`);
         }
@@ -168,8 +171,8 @@
             appendOutput(`Found ${events.events.length} Transfer events for the token on Arbitrum`);
 
             if (events.events && events.events.length > 0) {
-                appendOutput("\nFirst event:");
-                appendOutput(JSON.stringify(events.events[0], null, 2));
+                appendOutput("\nEvents:");
+                appendOutput(JSON.stringify(events.events, null, 2));
             }
             appendOutput("\n");
         } catch (error) {

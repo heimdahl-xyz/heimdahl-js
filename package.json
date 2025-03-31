@@ -8,7 +8,8 @@
     "example": "node examples/usage.js",
     "build": "esbuild src/index.js --bundle --outfile=dist/heimdahl.js",
     "build:min": "esbuild src/index.js --bundle --minify --outfile=dist/heidmahl.min.js",
-    "build:all": "npm run build && npm run build:min"
+    "build:all": "npm run build && npm run build:min",
+    "demo": ""
   },
   "keywords": [
     "blockchain",
@@ -22,6 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "esbuild": "^0.25.2",
+    "express": "^4.21.2",
     "node-fetch": "^2.6.7"
   },
   "engines": {
