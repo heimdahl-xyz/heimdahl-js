@@ -37,6 +37,21 @@ cd heimdahl-js
 <script src="path/to/heimdahl.min.js"></script>
 ```
 
+### How to run demo page 
+
+###
+
+```
+npm install 
+node server.js 
+```
+
+It should be running in your browser at localhost:3000/demo
+
+
+
+
+
 ## 🔑 Authentication
 
 You'll need an API key from Heimdahl to use this SDK. Get yours by:
