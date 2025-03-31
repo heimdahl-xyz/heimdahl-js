@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Heimdahl SDK Browser Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #output {
+            white-space: pre-wrap;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Heimdahl SDK Browser Example</h1>
+
+<div class="section">
+    <h2>API Tests</h2>
+    <button id="runAllTests">Run All Examples</button>
+    <button id="getChains">Get Chains</button>
+    <button id="getContracts">Get Contracts</button>
+    <button id="getSwaps">Get USDC/WETH Swaps</button>
+    <button id="getTransfers">Get USDC Transfers</button>
+    <button id="getEvents">Get Transfer Events</button>
+</div>
+
+<div class="section">
+    <h2>Results</h2>
+    <pre id="output">Results will appear here...</pre>
+</div>
+
+<!-- Include the Heimdahl SDK -->
+<script src="./client.js"></script>
+
+<script>
+    // Helper function to append output
+    function appendOutput(text) {
+        const output = document.getElementById('output');
+        output.textContent += text + '\n';
+    }
+
+    // Helper function to clear output
+    function clearOutput() {
+        const output = document.getElementById('output');
+        output.textContent = '';
+    }
+
+    // Initialize the client with your API key
+    const client = new HeimdahlClient("pk_dc07ea43afeb807362e9b67201e6d07054f7292edb2c4bad");
+
+    // Example 1: Get chains
+    async function testGetChains() {
+        try {
+            appendOutput("Getting supported chains...");
+            const chains = await client.getChains();
+            chains.forEach(c => {
+                appendOutput(`chain: ${c.chain_name}`);
+            });
+            appendOutput("\n");
+        } catch (error) {
+            appendOutput(`Error getting chains: ${error.message}`);
+        }
+    }
+
+    // Example 2: Get contracts
+    async function testGetContracts() {
+        try {
+            appendOutput("Getting registered contracts...");
+            const contracts = await client.getContracts();
+            contracts.slice(0, 3).forEach(c => {
+                appendOutput(`contract: ${c.contract_name}`);
+                appendOutput(`address: ${c.contract_address}`);
+                appendOutput(`events: ${c.events}`);
+                appendOutput("---");
+            });
+            appendOutput(`...and ${contracts.length - 3} more contracts\n`);
+        } catch (error) {
+            appendOutput(`Error getting contracts: ${error.message}`);
+        }
+    }
+
+    // Example 3: Get USDC/WETH swaps on Ethereum
+    async function testGetSwaps() {
+        try {
+            appendOutput("Getting USDC/WETH swaps on Ethereum...");
+            const swaps = await client.getSwaps({
+                chain: "ethereum",
+                token1: "USDC",
+                token2: "WETH",
+                sizeBucket: "all",
+                pageSize: 5
+            });
+
+            appendOutput(`${swaps.swaps.length} swaps found`);
+            swaps.swaps.forEach(e => {
+                appendOutput(`Token 1: ${e.token1_symbol}`);
+                appendOutput(`Token 2: ${e.token2_symbol}`);
+                appendOutput(`Amount 1: ${e.token1_amount}`);
+                appendOutput(`Amount 2: ${e.token2_amount}`);
+                appendOutput("---");
+            });
+            appendOutput("\n");
+        } catch (error) {
+            appendOutput(`Error getting swaps: ${error.message}`);
+        }
+    }
+
+    // Example 4: Get transfers for a specific address
+    async function testGetTransfers() {
+        try {
+            appendOutput("Getting USDC transfers from specific address on Arbitrum...");
+            const transfers = await client.getTransfers({
+                chain: "arbitrum",
+                token: "USDC",
+                fromAddress: "0x51C72848c68a965f66FA7a88855F9f7784502a7F",
+                pageSize: 5
+            });
+
+            appendOutput(`Found ${transfers.length} USDC transfers from the address on Arbitrum\n`);
+        } catch (error) {
+            appendOutput(`Error getting transfers: ${error.message}`);
+        }
+    }
+
+    // Example 5: Get Transfer events for a token
+    async function testGetEvents() {
+        try {
+            appendOutput("Getting Transfer events for USDC on Arbitrum...");
+            const events = await client.getEvents({
+                chain: "arbitrum",
+                tokenAddress: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+                eventName: "Transfer"
+            });
+
+            appendOutput(`Found ${events.events.length} Transfer events for the token on Arbitrum`);
+
+            if (events.events && events.events.length > 0) {
+                appendOutput("\nFirst event:");
+                appendOutput(JSON.stringify(events.events[0], null, 2));
+            }
+            appendOutput("\n");
+        } catch (error) {
+            appendOutput(`Error getting events: ${error.message}`);
+        }
+    }
+
+    // Run all examples
+    async function runAllExamples() {
+        clearOutput();
+        await testGetChains();
+        await testGetContracts();
+        await testGetSwaps();
+        await testGetTransfers();
+        await testGetEvents();
+        appendOutput("All examples completed!");
+    }
+
+    // Set up event listeners
+    document.getElementById('runAllTests').addEventListener('click', runAllExamples);
+    document.getElementById('getChains').addEventListener('click', () => {
+        clearOutput();
+        testGetChains();
+    });
+    document.getElementById('getContracts').addEventListener('click', () => {
+        clearOutput();
+        testGetContracts();
+    });
+    document.getElementById('getSwaps').addEventListener('click', () => {
+        clearOutput();
+        testGetSwaps();
+    });
+    document.getElementById('getTransfers').addEventListener('click', () => {
+        clearOutput();
+        testGetTransfers();
+    });
+    document.getElementById('getEvents').addEventListener('click', () => {
+        clearOutput();
+        testGetEvents();
+    });
+</script>
+</body>
+</html>

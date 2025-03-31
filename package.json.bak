@@ -1,0 +1,29 @@
+{
+  "name": "heimdahl-sdk",
+  "version": "1.0.0",
+  "description": "JavaScript SDK for the Heimdahl blockchain data platform",
+  "main": "heimdahl-client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "example": "node heimdahl-example.js"
+  },
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "arbitrum",
+    "crypto",
+    "api",
+    "sdk"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "browser": {
+    "node-fetch": false
+  }
+}
