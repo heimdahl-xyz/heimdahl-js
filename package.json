@@ -2,10 +2,13 @@
   "name": "heimdahl-js",
   "version": "1.0.0",
   "description": "JavaScript SDK for the Heimdahl blockchain data platform",
-  "main": "src/heimdahl-client.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "example": "node examples/usage.js"
+    "example": "node examples/usage.js",
+    "build": "esbuild src/index.js --bundle --outfile=dist/heimdahl.js",
+    "build:min": "esbuild src/index.js --bundle --minify --outfile=dist/heidmahl.min.js",
+    "build:all": "npm run build && npm run build:min"
   },
   "keywords": [
     "blockchain",
@@ -18,6 +21,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "esbuild": "^0.25.2",
     "node-fetch": "^2.6.7"
   },
   "engines": {

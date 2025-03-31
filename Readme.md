@@ -50,10 +50,10 @@ You'll need an API key from Heimdahl to use this SDK. Get yours by:
 ### Node.js (CommonJS)
 
 ```javascript
-const HeimdahlClient = require('heimdahl-js');
+const Index = require('heimdahl-js');
 
 // Initialize the client with your API key
-const client = new HeimdahlClient('your-api-key');
+const client = new Index('your-api-key');
 
 async function main() {
     try {
@@ -84,10 +84,10 @@ main();
 ### Node.js (ES Modules)
 
 ```javascript
-import HeimdahlClient from 'heimdahl-js';
+import Index from 'heimdahl-js';
 
 // Initialize the client with your API key
-const client = new HeimdahlClient('your-api-key');
+const client = new Index('your-api-key');
 
 // Use as shown in the CommonJS example
 ```
@@ -99,7 +99,7 @@ const client = new HeimdahlClient('your-api-key');
 <script src="heimdahl.min.js"></script>
 <script>
     // Initialize the client with your API key
-    const client = new HeimdahlClient('your-api-key');
+    const client = new Index('your-api-key');
 
     // Get supported chains
     client.getChains()
@@ -117,7 +117,7 @@ const client = new HeimdahlClient('your-api-key');
 ### Client Initialization
 
 ```javascript
-const client = new HeimdahlClient(apiKey, baseUrl);
+const client = new Index(apiKey, baseUrl);
 ```
 
 Parameters:

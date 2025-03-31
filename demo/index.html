@@ -63,7 +63,7 @@
 </div>
 
 <!-- Include the Heimdahl SDK -->
-<script src="./client.js"></script>
+<script src="./src/client.js"></script>
 
 <script>
     // Helper function to append output
@@ -79,7 +79,7 @@
     }
 
     // Initialize the client with your API key
-    const client = new HeimdahlClient("pk_dc07ea43afeb807362e9b67201e6d07054f7292edb2c4bad");
+    const client = new Index("pk_dc07ea43afeb807362e9b67201e6d07054f7292edb2c4bad");
 
     // Example 1: Get chains
     async function testGetChains() {

@@ -4,13 +4,13 @@
  */
 
 // In Node.js environment, you would import like this:
-const HeimdahlClient = require('../src/heimdahl-client');
+const HeimdahlClient = require('../src');
 
-// In browser, the HeimdahlClient would be available globally if you include the script
+// In browser, the Index would be available globally if you include the script
 
 async function runExamples() {
     // Initialize the client with your API key
-    const client = new HeimdahlClient("pk_dc07ea43afeb807362e9b67201e6d07054f7292edb2c4bad");
+    const client = new Index("pk_dc07ea43afeb807362e9b67201e6d07054f7292edb2c4bad");
 
     try {
         // Example 1: Get supported chains

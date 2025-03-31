@@ -9,7 +9,7 @@
 // import fetch from "node-fetch";
 
 
-class HeimdahlClient {
+class Index {
     /**
      * Initialize the Heimdahl client.
      *
@@ -319,7 +319,7 @@ class HeimdahlClient {
 
 // Export the client for both Node.js and browser environments
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = HeimdahlClient;
+    module.exports = Index;
 } else if (typeof window !== 'undefined') {
-    window.HeimdahlClient = HeimdahlClient;
+    window.Index = Index;
 }
