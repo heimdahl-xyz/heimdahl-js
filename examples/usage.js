@@ -3,6 +3,7 @@
  * This script can run in both Node.js and browser environments.
  */
 
+
 // In Node.js environment, you would import like this:
 const HeimdahlClient = require('../src/index');
 
@@ -73,6 +74,7 @@ async function runExamples() {
             console.log("\nFirst event:");
             console.log(events.events[0]);
         }
+
 
     } catch (error) {
         console.error("Error occurred:", error);

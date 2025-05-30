@@ -5,9 +5,23 @@
  * Compatible with both browser and Node.js environments.
  */
 
+var WS;
+
+if (typeof window !== 'undefined' && typeof window.WebSocket !== 'undefined') {
+    // We're in the browser
+    WS = window.WebSocket;
+} else {
+    try {
+        WS = require('ws');
+    } catch (e) {
+        console.error("WebSocket is not available in Node.js. Please install 'ws'.");
+        throw e;
+    }
+}
+
 class HeimdahlClient {
-    globalThis
-    HeimdahlClient = HeimdahlClient;
+    // globalThis
+    // HeimdahlClient = HeimdahlClient;
 
     /**
      * Initialize the Heimdahl client.
@@ -37,7 +51,7 @@ class HeimdahlClient {
      * @private
      */
     async _createConnection(endpoint, callback) {
-        var ws = new WebSocket(`${this.baseWSUrl}/${endpoint}?api_key=${this.apiKey}`);
+        var ws = new WS(`${this.baseWSUrl}/${endpoint}?api_key=${this.apiKey}`);
 
         ws.onmessage = function (message) {
             var msg = JSON.parse(message.data);
@@ -389,6 +403,61 @@ class HeimdahlClient {
     }
 
     /**
+     * Stream Solana swaps from Heimdahl.
+     *
+     * @param {string} pool - DEX source (e.g., "raydium-cpmm", "pumpfun")
+     * @param {Function} callback - Function to handle each swap event
+     */
+    async streamSwaps(pool, callback) {
+        const endpoint = `swaps/stream/solana.mainnet.${pool}`;
+        const ws = new WS(`${this.baseWSUrl}/${endpoint}?api_key=${this.apiKey}`);
+
+        ws.onmessage = function (message) {
+            try {
+                const msg = JSON.parse(message.data);
+
+                // Handle Raydium CPMM
+                if (msg.instruction === "swapBaseInput") {
+                    callback({
+                        type: "raydium",
+                        amountIn: msg.arguments.AmountIn,
+                        minOut: msg.arguments.MinimumAmountOut,
+                        accounts: msg.accounts,
+                        tx: msg.tx_signature,
+                        slot: msg.slot,
+                        program: msg.program
+                    });
+                }
+
+                // Handle Pump.fun
+                else if (msg.instruction === "buy") {
+                    callback({
+                        type: "pumpfun",
+                        amount: msg.arguments.Amount,
+                        maxSol: msg.arguments.MaxSolCost,
+                        accounts: msg.accounts,
+                        tx: msg.tx_signature,
+                        slot: msg.slot,
+                        program: msg.program
+                    });
+                }
+
+                // Unknown instruction
+                else {
+                    console.warn("Unknown instruction type:", msg.instruction);
+                }
+            } catch (err) {
+                console.error("Error parsing swap message:", err);
+            }
+        };
+
+        ws.onerror = function (err) {
+            console.error("WebSocket error:", err);
+        };
+    }
+
+
+    /**
      * Close the client (mostly for compatibility with Python version)
      * In JavaScript, this is a no-op as fetch doesn't maintain persistent connections
      */
@@ -397,4 +466,4 @@ class HeimdahlClient {
     }
 }
 
-globalThis.HeimdahlClient = HeimdahlClient;
+module.exports = HeimdahlClient;
