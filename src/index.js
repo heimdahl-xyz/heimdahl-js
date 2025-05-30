@@ -415,13 +415,24 @@ class HeimdahlClient {
         ws.onmessage = function (message) {
             try {
                 const msg = JSON.parse(message.data);
-
                 // Handle Raydium CPMM
                 if (msg.instruction === "swapBaseInput") {
                     callback({
+                        instruction: msg.instruction,
                         type: "raydium",
                         amountIn: msg.arguments.AmountIn,
-                        minOut: msg.arguments.MinimumAmountOut,
+                        minAmountOut: msg.arguments.MinimumAmountOut,
+                        accounts: msg.accounts,
+                        tx: msg.tx_signature,
+                        slot: msg.slot,
+                        program: msg.program
+                    });
+                } else if (msg.instruction === "swapBaseOutput") {
+                    callback({
+                        instruction: msg.instruction,
+                        type: "raydium",
+                        amountOut: msg.arguments.AmountOut,
+                        maxAmountIn: msg.arguments.MaxAmountIn,
                         accounts: msg.accounts,
                         tx: msg.tx_signature,
                         slot: msg.slot,
@@ -432,9 +443,21 @@ class HeimdahlClient {
                 // Handle Pump.fun
                 else if (msg.instruction === "buy") {
                     callback({
+                        instruction: msg.instruction,
                         type: "pumpfun",
                         amount: msg.arguments.Amount,
                         maxSol: msg.arguments.MaxSolCost,
+                        accounts: msg.accounts,
+                        tx: msg.tx_signature,
+                        slot: msg.slot,
+                        program: msg.program
+                    });
+                } else if (msg.instruction === "sell") {
+                    callback({
+                        instruction: msg.instruction,
+                        type: "pumpfun",
+                        amount: msg.arguments.Amount,
+                        minSol: msg.arguments.MinSolOutput,
                         accounts: msg.accounts,
                         tx: msg.tx_signature,
                         slot: msg.slot,
