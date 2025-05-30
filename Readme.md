@@ -9,6 +9,10 @@
 A powerful JavaScript SDK for interacting with the Heimdahl blockchain data platform. Access cross-chain swap, transfer,
 and event data through a unified interface.
 
+## Demo @ Codepen
+
+https://codepen.io/nozim/pen/vEYoLOJ
+
 ## 🚀 Features
 
 - **Cross-Chain Support** - Query data across multiple blockchains with a single API
